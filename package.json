@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "webpack && node ./server/server.js",
+    "open-coverage-report": "open ./coverage/lcov-report/index.html",
     "start": "webpack -p && node ./server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "repository": {
     "type": "git",

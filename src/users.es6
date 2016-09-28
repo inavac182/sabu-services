@@ -1,23 +1,5 @@
 /*jshint esversion: 6 */
+import Users from "./classes/users.class.es6"
 
-class users{
-	constructor() {
+let users = new Users();
 
-	}
-
-	get(id) {
-
-	}
-
-	add() {
-
-	}
-
-	update() {
-
-	}
-
-	delete() {
-
-	}
-}
