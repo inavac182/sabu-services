@@ -1,9 +1,4 @@
 /*jshint esversion: 6 */
-var User = mongoose.model('User', userSchema);
-module.exports = User;
-
-
-
 
 class Users{
 

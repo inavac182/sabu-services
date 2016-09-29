@@ -14,7 +14,6 @@
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
-    "istanbul-harmony": "^0.3.16",
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
     "mocha-lcov-reporter": "^1.2.0",
