@@ -6,7 +6,7 @@
   "scripts": {
     "open-coverage-report": "open ./coverage/lcov-report/index.html",
     "start": "node ./server/server.js",
-    "test": "instanbul cover _mocha"
+    "test": "istanbul cover _mocha"
   },
   "repository": {
     "type": "git",
