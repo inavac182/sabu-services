@@ -1,15 +1,16 @@
-import { expect } from 'chai';
-import Users from '../src/classes/users.class.es6';
+const should = require('should');
+const path = require('path');
+const Users = require('../src/classes/users.class.js');
 
 describe('User tests', () => {
-  let users;
+  	let users;
 
-  beforeEach(() => {
-    users = new Users();
-  });
+  	beforeEach(() => {
+    	users = new Users();
+	});
 
-    it('Should set name correctly', () => {
+	it('Should set name correctly', () => {
       users.add('Felipe','felipe.nava.co@gmail.com','mipass');
-      expect(users.getName(1)).to.equal('Felipe');
+      should.equal(users.getName(1),'Felipe');
     });
 });
