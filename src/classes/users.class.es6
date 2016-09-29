@@ -1,8 +1,6 @@
 /*jshint esversion: 6 */
 
 class Users{
-	constructor() {
-	}
 
 	getName(id) {
 		if(this.id === id){
