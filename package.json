@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "open-coverage-report": "open ./coverage/lcov-report/index.html",
-    "lint": "jshint src/ server/",
-    "start": "jshint src/ && node ./server/server.js",
-    "test": "istanbul cover _mocha"
+    "lint": "echo '=> linting' && jshint src/ server/",
+    "start": "node ./server/server.js",
+    "test": "istanbul cover _mocha",
+    "pretest": "npm run lint -s"
   },
   "repository": {
     "type": "git",
