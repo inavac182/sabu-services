@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "open-coverage-report": "open ./coverage/lcov-report/index.html",
-    "start": "node ./server/server.js",
+    "lint": "jshint src/ server/",
+    "start": "jshint src/ && node ./server/server.js",
     "test": "istanbul cover _mocha"
   },
   "repository": {
