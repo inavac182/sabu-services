@@ -1,4 +1,6 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 6, node: true */
+/*global require, module */
+'use strict';
 
 class Users{
 
@@ -19,7 +21,7 @@ class Users{
 		if (this.id === id){
 			this.name = name;
 			this.email = email;
-			this.password = passwor;
+			this.password = password;
 		}
 	}
 

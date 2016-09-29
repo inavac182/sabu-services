@@ -1,10 +1,12 @@
-'use strict'
+/*jshint esversion: 6, node: true */
+/*global require, module */
+'use strict';
 
-const 	express = require('express');
-		path = require('path');
-		port = process.env.PORT || 8080;
+const 	express = require('express'),
+		path = require('path'),
+		port = process.env.PORT || 8080,
 		bodyParser = require('body-parser'),
-		app = express();
+		app = express(),
 		UserModel = require('../src/models/users.model.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
