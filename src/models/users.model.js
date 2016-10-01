@@ -82,4 +82,12 @@ Users.validateNewUser = (data, callback) => {
 	});
 };
 
+
+Users.get = (query, callback) => {
+	UserModel.find(JSON.parse(query), (err, users) => {
+		console.log('Users Found:', users);
+		return callback('',users);
+	});
+};
+
 module.exports = Users;
