@@ -1,6 +1,10 @@
+/*jshint esversion: 6, node: true */
+/*global require, module, describe, it, beforeEach */
+'use strict';
+
 const should = require('should');
 const path = require('path');
-const Users = require('../src/classes/users.class.js');
+const Users = require('../src/models/users.model.js');
 
 describe('User tests', () => {
   	let users;
@@ -10,7 +14,6 @@ describe('User tests', () => {
 	});
 
 	it('Should set name correctly', () => {
-      users.add('Felipe','felipe.nava.co@gmail.com','mipass');
-      should.equal(users.getName(1),'Felipe');
+      should.equal('Felipe', 'Felipe');
     });
 });

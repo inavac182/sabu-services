@@ -1,6 +1,7 @@
 /*jshint esversion: 6, node: true */
 /*global require, module */
 'use strict';
+
 const mongoose = require('mongoose'),
 	  Schema = mongoose.Schema,
 	  Validators = require('../helpers/validators.helper.js'),
