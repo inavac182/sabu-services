@@ -8,7 +8,8 @@
     "lint": "echo '=> Linting' && jshint src/ server/",
     "start": "node ./server/server.js",
     "test": "echo '=> Unit testing' && istanbul cover _mocha",
-    "pretest": "npm run lint -s"
+    "pretest": "npm run lint -s",
+    "debug": "node debug ./server/server.js"
   },
   "repository": {
     "type": "git",
