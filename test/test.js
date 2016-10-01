@@ -6,6 +6,7 @@ const should = require('should');
 const path = require('path');
 const Users = require('../src/models/users.model.js');
 
+
 describe('User tests', () => {
   	let users;
 
