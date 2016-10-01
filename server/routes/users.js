@@ -3,27 +3,44 @@
 'use strict';
 
 const UserModel = require('../../src/models/users.model.js'),
+	  mongoose = require('mongoose'),
 	  express = require('express');
 
 let usersRouter = express.Router();
 
 usersRouter.route('/')
 	.post(function(req, res) {
-	    let user = new UserModel();
 
-	    console.log('Creating user with this data', req.body);
-	    user.name = req.body.name;
-	    user.username = req.body.username;
-	    user.password = req.body.password;
-	    user.plan = 0;
-	    user.created_date = new Date();
+	    UserModel.validateNewUser(req.body, (err, user) => {
 
-	    user.save(function(err) {
-	        if (err)
-	            res.send(err);
+	    	if (err) {
+	    		res.status(400).json(err);
+	    	} else {
 
-	        res.json({ message: 'User created!' });
+				let user = new UserModel({
+			    	'name': req.body.name,
+			    	'username': req.body.username,
+			    	'email': req.body.email,
+			    	'password': req.body.password,
+			    	'plan': 0,
+			    	'created_date': new Date()
+			    });
+
+				user.add( (err, user, affected) => {
+					if (err) {
+						res.status(400).send(err);
+				    }else{
+
+				    	res.status(200).json({ 
+				    		user,
+				    		message: 'User created'
+				    	});	
+			    	}
+				});
+
+			}
 	    });
+		
 	}).get(function(req, res) {
         UserModel.find(function(err, users) {
             if (err)
