@@ -4,12 +4,14 @@
 
 const UserModel = require('../../src/models/users.model.js'),
 	  mongoose = require('mongoose'),
-	  express = require('express');
+      Validators = require('../../src/helpers/validators.helper.js'),
+	  express = require('express'),
+      validators = new Validators();
 
 let usersRouter = express.Router();
 
 usersRouter.route('/')
-	.post(function(req, res) {
+	.post((req, res) => {
 
 	    UserModel.validateNewUser(req.body, (err, user) => {
 
@@ -41,12 +43,51 @@ usersRouter.route('/')
 			}
 	    });
 		
-	}).get(function(req, res) {
-        UserModel.find(function(err, users) {
-            if (err)
-                res.send(err);
+	}).get((req, res) => {
+        let query = req.get('query'),
+            dateStart,
+            dateEnd;
 
-            res.json(users);
+        if (req.get('dateStart') && req.get('dateStart')) {
+            if (Date.Parse(query.dateStart)) {
+                dateStart = new Date(query.dateStart);
+            } else {
+                res.status(400).json({ message: 'The start date is not a correct date', errorCode: 40010});
+            }
+
+            if (Date.Parse(query.dateEnd)) {
+                dateEnd = new Date(query.dateEnd);
+            } else {
+                res.status(400).json({ message: 'The end date is not a correct date', errorCode: 40011});
+            }
+            
+            if (typeof query === 'undefined') {
+                query = { dateStart : dateStart, dateEnd : dateEnd};
+            } else if (validators.validateJSON(query)) {
+                query = JSON.parse(query);
+                query.dateStart = dateStart;
+                query.dateEnd = dateEnd;
+            } else{
+                res.status(400).json({message: 'Query is not setted correctly', errorCode: 4008});
+            }
+        }
+
+        if (typeof query === 'undefined') {
+            res.status(400).json({ message: 'Query is empty', errorCode: 4009 });
+        }
+
+        if (validators.validateJSON(query)) {
+                query = JSON.parse(query);
+            } else{
+                res.status(400).json({message: 'Query is not setted correctly', errorCode: 4008});
+            }
+
+        UserModel.get( query, (err, users) => {
+            if (err) {
+                res.status(400).send(err);
+            } else {
+                res.status(200).json(users);
+            }
         });
 });
 
