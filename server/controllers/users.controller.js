@@ -92,7 +92,7 @@ usersRouter.route('/:user_id')
         if (!validators.validateId(req.params.user_id)) {
             res.status(400).json({ message: 'ID value is not correct', errorCode: 40015});
         } else {
-            UserModel.findById(req.params.user_id, function(err, user) {
+            UserModel.findById(req.params.user_id, '_id name username email plan created_date', function(err, user) {
             if (err)
                 res.send(err);
             
@@ -140,14 +140,28 @@ usersRouter.route('/:user_id')
         }
 
     }).delete(function(req, res) {
-        UserModel.remove({
-            _id: req.params.user_id
-        }, function(err, user) {
-            if (err)
-                res.send(err);
+        
+        if (validators.validateId(req.params.user_id)) {
+            UserModel.findById(req.params.user_id, (err, user) => {
 
-            res.json({ message: 'Successfully deleted' });
-        });
+                if (user){
+                    user.remove(function(err, removed) {
+                        if (err)
+                            res.send(err);
+
+                        console.log('Removed:', removed);
+                        res.status(200).json({ message: 'Successfully deleted' });
+                    });    
+                } else {
+                    res.status(200).json({ message: 'User not found', errorCode:  40012});
+                }
+
+            });
+            
+        } else {
+            res.status(400).json({ message: 'ID value is not correct', errorCode: 40015});
+        }
+        
     });
 
 module.exports = usersRouter;

@@ -62,6 +62,13 @@ Services for sabu app
 				8. JSON: {message: 'User was not updated', errorCode: 40017}
 			2. 200 - OK
 				1. JSON {message: 'User updated successfully'}
-	### REMOVE
-
-#Internal Error Codes
+	### DELETE
+	- Remove an user from the app
+		- No parameters needed as user id comes in the url.
+	- Responses:
+		-HTTP Codes:
+			1. 400 - Bad Request
+				1. JSON: { message: 'User not found', errorCode:  40012}
+				2. JSON: { message: 'ID value is not correct', errorCode: 40015}
+			2. 200 - OK
+				1. JSON { message: 'Successfully deleted' }
