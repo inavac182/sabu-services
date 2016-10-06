@@ -3,8 +3,9 @@
 'use strict';
 
 const 	express = require('express'),
-		port = process.env.PORT || 8080,
+		port = process.env.PORT || 8081,
 		bodyParser = require('body-parser'),
+		env = process.env.NODE_ENV || 'dev',
 		router = require('./router'),
 		DataBase = require('../src/helpers/db.helper.js'),
 		app = express();
@@ -23,7 +24,7 @@ app.use(router);
 
 app.listen(port);
 
-const db = new DataBase();
+const db = new DataBase(env);
 db.openConnection();
 
 console.log('Server is up');

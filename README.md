@@ -21,7 +21,7 @@ Services for sabu app
 				6. JSON: {message: 'Name is empty', errorCode: 4006}
 				7. JSON: {message: 'Password is empty', errorCode: 4007}
 			1. 200 - OK
-				1. JSON: {message: 'User is created', user: {"name", "username", "email", "password", "plan", "created_date", "_id"}}
+				1. JSON: { message: 'User is created' }
 	### GET
 	- Getting users from DB, data required:
 		1. query {Json, required} <- The query to filter results, {} <- Will return all users, { username: 'myUser'} <- Will return users with username myUser.  This parameter MUST go in the HEADERS of the request.
@@ -35,9 +35,33 @@ Services for sabu app
 			1. 400 - Bad Requers
 				1. JSON: {message: 'Query is not setted correctly', errorCode: 4008}
 				2. JSON: {message: 'Query is empty', errorCode: 4009}
-				2. JSON: {message: 'The start date is not a correct date', errorCode: 40010}
-				2. JSON: {message: 'The end date is not a correct date', errorCode: 40011}
+				3. JSON: {message: 'The start date is not a correct date', errorCode: 40010}
+				4. JSON: {message: 'The end date is not a correct date', errorCode: 40011}
+				5. JSON: {message: 'User not found', errorCode: 40012}
+				6. JSON: {message: 'ID is not correct', errorCode: 40015}
 			2. 200 -OK
 				1. JSON [{"_id", "name", "username", "password", "plan", "created_at"}, {...}]
+
+	/users/:user_id
+	### PUT
+	- Update data for 1 user by id.
+		1. name {String}
+		2. username {String}
+		3. password {String}
+		4. email {String}
+	-Responses:
+		- HTTP Codes:
+			1. 400 - Bad Request
+				1. JSON: {message: 'ID is empty', errorCode: 40013}
+				2. JSON: {message: 'User not found', errorCode: 40012}
+				3. JSON: {message: 'Data is empty', errorCode: 40014}
+				4. JSON: {message: 'ID is not correct', errorCode: 40015}
+				5. JSON: {message: 'Data is not setted correctly', errorCode: 40016}
+				6. JSON: {message: 'Email is duplicated', errorCode: 4005}
+				7. JSON: {message: 'Username is duplicated', errorCode: 4002}
+				8. JSON: {message: 'User was not updated', errorCode: 40017}
+			2. 200 - OK
+				1. JSON {message: 'User updated successfully'}
+	### REMOVE
 
 #Internal Error Codes

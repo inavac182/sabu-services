@@ -33,16 +33,13 @@ const mongoose = require('mongoose'),
 class Users extends UserModel{
 
 	add(callback) {
-	    return super.save(callback);
+	    super.save(callback);
 	}
 
-	get() {
-
+	remove(callback) {
+		super.remove(callback);
 	}
 
-	remove() {
-
-	}
 }
 
 Users.validateNewUser = (data, callback) => {
@@ -84,10 +81,102 @@ Users.validateNewUser = (data, callback) => {
 
 
 Users.get = (query, callback) => {
-	UserModel.find(JSON.parse(query), (err, users) => {
-		console.log('Users Found:', users);
+	UserModel.find(query, '_id name username email plan created_date', (err, users) => {
 		return callback('',users);
 	});
+};
+
+Users.update = (id, data, callback) => {
+	if (!id) {
+		return callback({ message: 'ID is empty', errorCode : 40013}, '', 0);
+	}
+
+	if (!data || validators.isEmptyObject(data)) {
+		return callback({ message: 'Data is empty', errorCode: 40014}, '', 0);
+	}
+	mongoose.Promise = global.Promise;
+	
+	let checkCommonData = (user) => {
+		if (user) {
+
+			if (data.name && data.name !== '')
+        		user.name = data.name; 
+
+    		if (data.plan && data.plan !== '')
+        		user.plan = data.plan;
+
+		} else {
+			throw new Error(40012);
+		}
+
+		return user;
+	};
+
+	let checkUsername = (user) => {
+		if (data.username && user.username !== data.username) {
+			let query = { username:  data.username };
+
+			return UserModel.find(query).exec()
+			.then((userFound) => {
+				if (userFound.length > 0) {
+					user = null;
+					throw new Error(4002);
+				} else {
+					user.username = data.username;
+					return user;
+				}
+
+			})
+			.catch((err) => {throw new Error(err); });
+		}
+
+		return user;
+	};
+
+	let checkEmail = (user) => {
+		if (data.email && user.email !== data.email) {
+
+			if (!validators.validateEmail(data.email)) {
+				throw new Error(4004);
+			}
+			let query = { email:  data.email };
+
+			return UserModel.find(query).exec()
+			.then((userFound) => { 
+				if (userFound.length > 0) {
+					user = null;
+					throw new Error(4005);
+				} else {
+					user.email = data.email;
+					return user;
+				}
+			})
+			.catch((err) => { throw new Error(err); });
+		}
+
+		return user;
+	};
+
+	let errorFound = (err) => {
+		return callback(err);
+	};
+
+	let saveChanges = (user) => {
+		return user.save(function(err, user, affected) {
+            if (err) {
+            	throw new Error(err);
+            }
+            return callback('', user, affected);
+        });
+	};
+
+	let findById = UserModel.findById(id).exec();
+		
+		findById.then(checkCommonData)
+		.then(checkUsername)
+		.then(checkEmail)
+		.then(saveChanges)
+		.catch(errorFound);
 };
 
 module.exports = Users;

@@ -31,16 +31,11 @@ usersRouter.route('/')
 				user.add( (err, user, affected) => {
 					if (err) {
 						res.status(400).send(err);
-				    }else{
-
-				    	res.status(200).json({ 
-				    		user,
-				    		message: 'User created'
-				    	});	
+				    } else {
+				    	res.status(200).json({ idUser: user._id, message: 'User created' });	
 			    	}
 				});
-
-			}
+            }
 	    });
 		
 	}).get((req, res) => {
@@ -51,7 +46,7 @@ usersRouter.route('/')
         if (req.get('dateStart') && req.get('dateStart')) {
             if (Date.Parse(query.dateStart)) {
                 dateStart = new Date(query.dateStart);
-            } else {
+            } else   {
                 res.status(400).json({ message: 'The start date is not a correct date', errorCode: 40010});
             }
 
@@ -68,7 +63,7 @@ usersRouter.route('/')
                 query.dateStart = dateStart;
                 query.dateEnd = dateEnd;
             } else{
-                res.status(400).json({message: 'Query is not setted correctly', errorCode: 4008});
+                res.status(400).json({ message: 'Query is not setted correctly', errorCode: 4008});
             }
         }
 
@@ -79,7 +74,7 @@ usersRouter.route('/')
         if (validators.validateJSON(query)) {
                 query = JSON.parse(query);
             } else{
-                res.status(400).json({message: 'Query is not setted correctly', errorCode: 4008});
+                res.status(400).json({ message: 'Query is not setted correctly', errorCode: 4008});
             }
 
         UserModel.get( query, (err, users) => {
@@ -93,36 +88,61 @@ usersRouter.route('/')
 
 usersRouter.route('/:user_id')
 	.get(function(req, res) {
-        UserModel.findById(req.params.user_id, function(err, user) {
+
+        if (!validators.validateId(req.params.user_id)) {
+            res.status(400).json({ message: 'ID value is not correct', errorCode: 40015});
+        } else {
+            UserModel.findById(req.params.user_id, function(err, user) {
             if (err)
                 res.send(err);
-
-            res.json(user);
-        });
+            
+            if (user && user.toObject()) {
+                res.status(200).json(user);
+            } else {
+                res.status(400).json({ message: 'User not found.', errorCode: 40012 });    
+            }
+            
+            });
+        }
+        
     }).put(function(req, res) {
 
-        UserModel.findById(req.params.user_id, function(err, user) {
+        if (!validators.validateId(req.params.user_id)) {
+            res.status(400).json({ message: 'ID value is not correct', errorCode: 40015});
+        } else {
+            UserModel.update(req.params.user_id, req.body, (err, user, affected) => {
+                if (err) {
+                    if (err.message === 'Error: 4002') {
+                        return res.status(400).json({ message: 'Username is duplicated', errorCode: 4002});   
+                    }
 
-            if (err)
-                res.send(err);
+                    if (err.message === 'Error: 4005') {
+                        return res.status(400).json({ message: 'Email is duplicated', errorCode: 4005});   
+                    }
 
-            user.name = req.body.name; 
-           	user.username = req.body.username;  
-           	user.pass = req.body.pass;  
-           	user.plan = req.body.plan;  
+                    if (err.message === 'Error: 40012') {
+                        return res.status(400).json({ message: 'User not found', errorCode: 40012});   
+                    }
 
-            user.save(function(err) {
-                if (err)
-                    res.send(err);
+                    if (err.message === 'Error: 4004') {
+                        return res.status(400).json({ message: 'Email is not correct', errorCode: 4004});   
+                    }
 
-                res.json({ message: 'User updated!' });
+                    return res.status(400).json({ message: 'Something went wrong D:', errorCode: 401 });   
+                }
+
+                if (affected > 0) {
+                    res.status(200).json({ message: 'User is updated'});
+                } else {
+                    res.status(400).json({ message: 'User was not updated', errorCode: 40017});
+                }
             });
+        }
 
-        });
     }).delete(function(req, res) {
         UserModel.remove({
             _id: req.params.user_id
-        }, function(err, bear) {
+        }, function(err, user) {
             if (err)
                 res.send(err);
 

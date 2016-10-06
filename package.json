@@ -6,7 +6,8 @@
   "scripts": {
     "open-coverage-report": "open ./coverage/lcov-report/index.html",
     "lint": "echo '=> Linting' && jshint src/ server/",
-    "start": "node ./server/server.js",
+    "start": "NODE_ENV=production node ./server/server.js",
+    "start-dev": "NODE_ENV=dev node ./server/server.js",
     "test": "echo '=> Unit testing' && istanbul cover _mocha",
     "pretest": "npm run lint -s",
     "debug": "node debug ./server/server.js"

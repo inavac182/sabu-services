@@ -16,7 +16,7 @@ router.use(function (req, res, next) {
   }
 });
 
- router.use('/users', require('./routes/users'));
+ router.use('/users', require('./controllers/users.controller.js'));
 
 
  module.exports = router;
