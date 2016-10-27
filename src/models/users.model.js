@@ -25,7 +25,11 @@ const mongoose = require('mongoose'),
 					type: String, 
 					required: true 
 				},
-				plan: Boolean,
+				plan: {
+					type: Number,
+					required: true
+				},
+				user_active: Boolean,
 				created_date: Date
 			}),
 	  UserModel = mongoose.model('User', userSchema),
@@ -37,10 +41,6 @@ class Users extends UserModel{
 
 	add(callback) {
 	    super.save(callback);
-	}
-
-	remove(callback) {
-		super.remove(callback);
 	}
 
 }
@@ -78,13 +78,14 @@ Users.create = (data, callback) => {
 					return callback({ message: errors.getMessage(4005), errorCode: 4005 }, '');
 				} else {
 					
-					let user = new UserModel({
+					let user = new Users({
 				    	'name': data.name,
 				    	'username': data.username,
 				    	'email': data.email,
 				    	'password': data.password,
 				    	'plan': 0,
-				    	'created_date': new Date()
+				    	'created_date': new Date(),
+				    	'user_active': true
 				    });
 
 					user.add( (err, user, affected) => {
@@ -145,16 +146,19 @@ Users.get = (req, callback) => {
 			return callback({ message: errors.getMessage(4008), errorCode: 4008}, '');   
 		}
 
-	UserModel.find(query, '_id name username email plan created_date', (err, users) => {
+	query.user_active = true;
+	console.log(query);
+
+	UserModel.find(query, '_id name username email plan created_date user_active', (err, users) => {
 		return callback('',users);
 	});
 };
 
 Users.update = (id, data, callback) => {
+
 	if (!id) {
 		return callback({ message: errors.getMessage(40013), errorCode : 40013}, '', 0);
 	}
-
 
     if (!validators.validateId(id)) {
         return callback({ message: errors.getMessage(40015), errorCode: 40015}, '');
@@ -186,17 +190,17 @@ Users.update = (id, data, callback) => {
 				let query = { username:  data.username };
 
 				return UserModel.find(query).exec()
-				.then((userFound) => {
-					if (userFound.length > 0) {
-						user = null;
-						throw new Error(4002);
-					} else {
-						user.username = data.username;
-						return user;
-					}
+					.then((userFound) => {
+						if (userFound.length > 0) {
+							user = null;
+							throw new Error(4002);
+						} else {
+							user.username = data.username;
+							return user;
+						}
 
-				})
-				.catch((err) => {throw new Error(err); });
+					})
+					.catch((err) => { throw new Error(err); });
 			}
 
 			return user;
@@ -255,13 +259,13 @@ Users.update = (id, data, callback) => {
 	        });
 		};
 
-		let findById = UserModel.findById(id).exec();
+		let findUser = UserModel.findById(id).exec();
 			
-			findById.then(checkCommonData)
-			.then(checkUsername)
-			.then(checkEmail)
-			.then(saveChanges)
-			.catch(errorFound);
+		findUser.then(checkCommonData)
+		.then(checkUsername)
+		.then(checkEmail)
+		.then(saveChanges)
+		.catch(errorFound);
 	}
 };
 
@@ -270,7 +274,7 @@ Users.getById = (id, callback) => {
 	if (!validators.validateId(id)) {
             return callback({ message: errors.getMessage(40015), errorCode: 40015}, '');
         } else {
-            UserModel.findById(id, '_id name username email plan created_date', function(err, user) {
+            UserModel.findById(id, '_id name username email plan created_date user_active', function(err, user) {
 	            if (err)
 	                return callback(err, '');
 	            
@@ -287,14 +291,15 @@ Users.delete = (id, callback) => {
 	if (validators.validateId(id)) {
             UserModel.findById(id, (err, user) => {
                 if (user){
-                    user.remove(function(err, removed) {
-                        if (err)
-                            return callback(err, '');
+                    UserModel.remove({ _id: id }, (err) => {
+                    	if (err) {
+                    		return callback(err, null);
+                    	}
 
-                        return callback('', { message: 'Successfully deleted' });
-                    });    
+                    	return callback(null, 'User is removed');
+                    });
                 } else {
-                    return callback({ message: errors.getMessage(40012), errorCode:  40012}, '');
+                    return callback({ message: errors.getMessage(40018), errorCode:  40018}, '');
                 }
 
             });

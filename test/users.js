@@ -22,7 +22,7 @@ describe('User tests', () => {
     });
 
   	afterEach(()=>{
-  		
+      
   	});
 
     after(() => {

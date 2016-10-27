@@ -23,6 +23,7 @@ class Errors{
 		this.errors.push({ value : 40015, message : 'ID value is not correct' });
 		this.errors.push({ value : 40016, message : 'Data is not setted correctly' });
 		this.errors.push({ value : 40017, message : 'User was not updated' });
+		this.errors.push({ value : 40018, message : 'Error while removing the user' });
 	}
 
 	getMessage(idError) {
