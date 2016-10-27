@@ -8,7 +8,8 @@
     "lint": "echo '=> Linting' && jshint src/ server/",
     "start": "NODE_ENV=production node ./server/server.js",
     "start-dev": "NODE_ENV=dev node ./server/server.js",
-    "test": "echo '=> Unit testing' && istanbul cover _mocha",
+    "test": "echo '=> Unit testing' && NODE_ENV=production istanbul cover _mocha",
+    "test-dev": "echo '=> Unit testing' && NODE_ENV=dev istanbul cover _mocha",
     "pretest": "npm run lint -s",
     "debug": "node debug ./server/server.js"
   },
@@ -27,7 +28,8 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongodb": "^2.2.10",
-    "mongoose": "^4.6.1"
+    "mongoose": "^4.6.1",
+    "mongoose-beautiful-unique-validation": "^5.1.1"
   },
   "author": "",
   "license": "ISC",
