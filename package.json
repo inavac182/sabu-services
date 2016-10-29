@@ -8,8 +8,7 @@
     "lint": "echo '=> Linting' && jshint src/ server/",
     "start": "NODE_ENV=production node ./server/server.js",
     "start-dev": "NODE_ENV=dev node ./server/server.js",
-    "test": "echo '=> Unit testing' && NODE_ENV=production istanbul cover _mocha",
-    "test-dev": "echo '=> Unit testing' && NODE_ENV=dev istanbul cover _mocha",
+    "test": "echo '=> Unit testing' && NODE_ENV=test istanbul cover _mocha",
     "pretest": "npm run lint -s",
     "debug": "node debug ./server/server.js"
   },
@@ -22,7 +21,8 @@
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
     "mocha-lcov-reporter": "^1.2.0",
-    "should": "^11.1.0"
+    "should": "^11.1.0",
+    "sinon": "^1.17.6"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

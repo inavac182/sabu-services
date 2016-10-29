@@ -71,4 +71,44 @@ Services for sabu app
 				1. JSON: { message: 'User not found', errorCode:  40012}
 				2. JSON: { message: 'ID value is not correct', errorCode: 40015}
 			2. 200 - OK
-				1. JSON { message: 'Successfully deleted' }
+				1. JSON { message: 'User is removed' }
+
+## Accounts API
+	/accounts
+	### POST 
+	- Creating a new account
+		1. idType {mongo id}
+		2. idUser {mongo id}
+		3. name {String}
+		4. balance {Number}
+	- Responses:
+		1. HTTP Codes:
+			1. 400 - Bad Request
+				1. JSON: { message : 'Id type is empty', errorCode: 40019}
+				2. JSON: { message : 'Id user is empty', errorCode: 40020}
+				3. JSON: { message : 'ID type is not correct', errorCode: 40023}
+				4. JSON: { message : 'ID user is not correct', errorCode: 40022}
+				5. JSON: { message : 'Name is empty', errorCode: 4006}
+				6. JSON: { message : 'Balance is empty', errorCode: 40021}
+			2. 200 - OK
+				1. JSON: { message : 'Account is created'}
+
+	### GET
+	- Getting the accounts
+		1. idUser {mongo id}
+	- Responses:
+		1. HTTP Codes:
+			1. 400 - Bad Request
+				1. JSON: { message: 'Query is empty', errorCode: 40010}
+				2. JSON: { message: 'Query is not setted correctly', errorCode: 4008}
+				3. JSON: { message: 'Id user is empty', errorCode: 40020}
+				4. JSON: { message: 'ID user is not correct', errorCode: 40022}
+			2. 200 - OK
+				. JSON: [{"_id", "idType", "name", "balance", "money_date"}]
+
+## Account types API
+	/account_types
+	### POST
+	### GET
+	### PUT
+	### DELETE

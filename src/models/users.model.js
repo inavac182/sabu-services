@@ -2,40 +2,41 @@
 /*global require, module */
 'use strict';
 
-const mongoose = require('mongoose'),
-	  Schema = mongoose.Schema,
-	  Validators = require('../helpers/validators.helper.js'),
-	  Errors = require('../helpers/errors.helper.js'),
-	  userSchema = new Schema({
-				name: {
-					type: String,
-					required: true
-				},
-				username: { 
-					type: String, 
-					required: true, 
-					unique: true 
-				},
-				email: {
-					type: String,
-					required: true,
-					unique: true
-				},
-				password: {
-					type: String, 
-					required: true 
-				},
-				plan: {
-					type: Number,
-					required: true
-				},
-				user_active: Boolean,
-				created_date: Date
-			}),
-	  UserModel = mongoose.model('User', userSchema),
-	  env = process.env.NODE_ENV || 'dev',
-	  errors = new Errors(env),
-	  validators = new Validators();
+const env = process.env.NODE_ENV || 'dev',
+	//mongoose = (process.env.NODE_ENV !== 'test') ? require('mongoose') : require('../../test/mocks/mongoose.mock.js'),
+	mongoose = require('mongoose'),
+	Schema = mongoose.Schema,
+	Validators = require('../helpers/validators.helper.js'),
+	Errors = require('../helpers/errors.helper.js'),
+	userSchema = new Schema({
+			name: {
+				type: String,
+				required: true
+			},
+			username: { 
+				type: String, 
+				required: true, 
+				unique: true 
+			},
+			email: {
+				type: String,
+				required: true,
+				unique: true
+			},
+			password: {
+				type: String, 
+				required: true 
+			},
+			plan: {
+				type: Number,
+				required: true
+			},
+			user_active: Boolean,
+			created_date: Date
+		}),
+	UserModel = mongoose.model('User', userSchema),
+	errors = new Errors(env),
+	validators = new Validators();
 
 class Users extends UserModel{
 
@@ -136,7 +137,7 @@ Users.get = (req, callback) => {
         }
 
         if (typeof query === 'undefined') {
-            return callback({ message: errors.getMessage(4009), errorCode: 4009 }, '');
+            return callback({ message: errors.getMessage(40010), errorCode: 40010 }, '');
         }
 
 		try {
@@ -147,7 +148,6 @@ Users.get = (req, callback) => {
 		}
 
 	query.user_active = true;
-	console.log(query);
 
 	UserModel.find(query, '_id name username email plan created_date user_active', (err, users) => {
 		return callback('',users);

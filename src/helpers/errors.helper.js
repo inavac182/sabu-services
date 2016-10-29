@@ -14,7 +14,7 @@ class Errors{
 		this.errors.push({ value : 4006, message : 'Name is empty' });
 		this.errors.push({ value : 4007, message : 'Password is empty' });
 		this.errors.push({ value : 4008, message : 'Query is not setted correctly' });
-		this.errors.push({ value : 4009, message : 'Name is empty' });
+		this.errors.push({ value : 4009, message : 'Accout type was not updated' });
 		this.errors.push({ value : 40010, message : 'Query is empty' });
 		this.errors.push({ value : 40011, message : 'The end date is not a correct date' });
 		this.errors.push({ value : 40012, message : 'User not found' });
@@ -24,6 +24,14 @@ class Errors{
 		this.errors.push({ value : 40016, message : 'Data is not setted correctly' });
 		this.errors.push({ value : 40017, message : 'User was not updated' });
 		this.errors.push({ value : 40018, message : 'Error while removing the user' });
+		this.errors.push({ value : 40019, message : 'Id type is empty' });
+		this.errors.push({ value : 40020, message : 'Id user is empty' });
+		this.errors.push({ value : 40021, message : 'Balance is empty' });
+		this.errors.push({ value : 40022, message : 'ID user is not correct' });
+		this.errors.push({ value : 40023, message : 'ID type is not correct' });
+		this.errors.push({ value : 40024, message : 'Name is duplicated' });
+		this.errors.push({ value : 40025, message : 'Account type was not found' });
+		this.errors.push({ value : 40026, message : 'Account type was not updated' });
 	}
 
 	getMessage(idError) {
