@@ -116,6 +116,14 @@ Accounts.get = (req, callback) => {
 	});
 };
 
+Accounts.update = (req, callback) => {
+	
+};
+
+Accounts.remove = () => {
+
+};
+
 Accounts.accountTypeUsed = (idAccount_type) => {
 	return AccountModel.find({ idType: idAccount_type}, '_id idType');
 };

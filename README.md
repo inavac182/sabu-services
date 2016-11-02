@@ -137,4 +137,15 @@ Services for sabu app
 			6. JSON: { message: 'Account type was not found', errorCode: 40025}
 		2. 200 - OK
 			1. JSON: { message: 'Account type updated'}
+	/account_types/:account_type_id
 	### DELETE
+	- Deleting an account type
+		1. account_type_id
+	- Responses:
+		1. 400 - Bad Request
+			1. JSON: { message: 'ID type is not correct', errorCode: 40023}
+			2. JSON: { message: 'Account type was not found', errorCode: 40025}
+			3. JSON: { message: 'The account type is being used', errorCode: 40028}
+		2. 200 - OK
+			1. JSON: { message: 'Account type was removed'}
+
