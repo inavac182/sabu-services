@@ -16,6 +16,8 @@ router.use(function (req, res, next) {
 });
 
  router.use('/users', require('./controllers/users.controller.js'));
+ router.use('/accounts', require('./controllers/accounts.controller.js'));
+ router.use('/account_types', require('./controllers/account_types.controller.js'));
 
 
  module.exports = router;
