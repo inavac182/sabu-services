@@ -15,7 +15,8 @@ const mongoose = require('mongoose'),
 	Account_typeModel = mongoose.model('Account_types', account_typeSchema),
 	env = process.env.NODE_ENV || 'dev',
 	errors = new Errors(env),
-	validators = new Validators();
+	validators = new Validators(),
+	Accounts = require('../models/accounts.model.js');
 
 class Account_types extends Account_typeModel{
 	add(callback) {
@@ -26,7 +27,7 @@ class Account_types extends Account_typeModel{
 Account_types.create = (data, callback) => {
 
 	if (!data.name) {
-		return callback({ message: errors.getMessage(4009), errorCode: 4009},'');
+		return callback({ message: errors.getMessage(4006), errorCode: 4006},'');
 	}
 
 	let account_type = new Account_types({
@@ -76,21 +77,15 @@ Account_types.update = (id, data, callback) => {
 				if (account_type_found.length > 0) {
 					return callback({ message: errors.getMessage(40024), errorCode: 40024 }, '');
 				} else {
-					console.log(id);
-					Account_typeModel.findById(id, (account_type) => {
-						console.log('Account type: ', account_type);
-						if (account_type && account_type.length > 0) {
+					Account_typeModel.findById(id, (err, account_type) => {
+						if (account_type && account_type.toObject()) {
 							account_type.name = data.name;
 
-							account_type.save((err, account, affected) => {
+							account_type.save((err, account_type, affected) => {
 								if (err) {
 									return callback(err, '');
 								} else {
-									if (affected > 0){
-										return callback('', { message: 'Account type is modified'});
-									} else {
-										return callback({ message: errors.getMessage(40026), errorCode: 40026 }, '');
-									}
+									return callback('', account_type, affected);
 								}
 							});
 						} else {
@@ -104,7 +99,6 @@ Account_types.update = (id, data, callback) => {
 };
 
 Account_types.getById = (id, callback) => {
-
 	if (!validators.validateId(id)) {
             return callback({ message: errors.getMessage(40015), errorCode: 40015}, '');
         } else {
@@ -121,5 +115,59 @@ Account_types.getById = (id, callback) => {
         }
 };
 
-module.exports = Account_types;
+Account_types.delete = (id, callback) => {
+	if (validators.validateId(id)) {
+        let checkIfExists = (account_type) => {
+        	if (account_type && account_type._id !== '') {
+        		return account_type;
+        	} else {
+        		throw new Error(40025);
+        	}
+        };
 
+        let checkIfHaveAccounts = (account_type) => {
+        	return Accounts.accountTypeUsed(id).exec()
+	        	.then((account_type_used) => {
+	        		if (account_type_used.length > 0) {
+		    	 		throw new Error(40028);
+		        	} else {
+		        	 	return account_type;
+		    		}
+	        	}).catch((err) => { throw new Error(err);});
+        };
+
+        let deleteAccountType = (account_type) => {
+        	account_type.remove((err) => {
+        		if (err) {
+        			console.log(401, err);
+					throw new Error(401);
+        		}
+
+        		return callback(null, 'Account type is removed');
+            });
+        };
+
+        let errorFound = (err) => {
+        	if (err.message === '40025')
+        		return callback({ message: errors.getMessage(40025), errorCode:  40025}, '');
+
+        	if (err.message === '401')
+        		return callback({ message: errors.getMessage(401), errorCode:  401}, '');
+
+			if (err.message === 'Error: 40028')
+        		return callback({ message: errors.getMessage(40028), errorCode:  40028}, '');
+        };
+
+        let findAccount_type = Account_types.findById(id).exec();
+
+        findAccount_type.then(checkIfExists)
+        .then(checkIfHaveAccounts)
+        .then(deleteAccountType)
+        .catch(errorFound);
+
+    } else {
+        return callback({ message: errors.getMessage(40015), errorCode: 40015}, '');
+    }
+};
+
+module.exports = Account_types;

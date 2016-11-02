@@ -167,7 +167,6 @@ Users.update = (id, data, callback) => {
 		if (!data || validators.isEmptyObject(data)) {
 			return callback({ message: errors.getMessage(40014), errorCode: 40014}, '', 0);
 		}
-		mongoose.Promise = global.Promise;
 		
 		let checkCommonData = (user) => {
 			if (user) {

@@ -6,13 +6,14 @@ const mongoose = require('mongoose'),
 	  Schema = mongoose.Schema,
 	  Validators = require('../helpers/validators.helper.js'),
 	  Errors = require('../helpers/errors.helper.js'),
+	  ObjectId = Schema.ObjectId,
 	  accountSchema = new Schema({
 				idType: {
-					type: Number,
+					type: ObjectId,
 					required: true
 				},
 				idUser: {
-					type: Number,
+					type: ObjectId,
 					required: true
 				},
 				name: {
@@ -107,12 +108,16 @@ Accounts.get = (req, callback) => {
     }
 
 	AccountModel.find(query, '_id idType name balance money_date', (err, accounts) => {
-		if(err) {
+		if (err) {
 			return callback(err, '');
 		} else {
 			return callback('',accounts);
 		}
 	});
+};
+
+Accounts.accountTypeUsed = (idAccount_type) => {
+	return AccountModel.find({ idType: idAccount_type}, '_id idType');
 };
 
 module.exports = Accounts;

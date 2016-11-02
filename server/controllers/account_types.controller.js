@@ -42,18 +42,26 @@ account_typesRouter.route('/:account_type_id')
         });
         
     }).put(function(req, res) {
-        Account_typesModel.update(req.params.account_type_id, req.body, (err, user, affected) => {
+        Account_typesModel.update(req.params.account_type_id, req.body, (err, account_type, affected) => {
             if (err) {
                 return res.status(400).json(err);   
             } else {
                 if (affected > 0) {
                     res.status(200).json({ message: 'Account type updated'});
                 } else {
-                    res.status(400).json({ message: errors.getMessage(4009), errorCode: 4009});
+                    res.status(400).json({ message: errors.getMessage(40026), errorCode: 40026});
                 }
             }
     	});
-  	});
+  	}).delete(function(req, res) {
+        Account_typesModel.delete(req.params.account_type_id, (err, removed) => {
+            if (err) {
+                res.status(400).json(err); 
+            } else {
+                res.status(200).json({message: 'Account type is removed'});
+            }
+        });
+    });
 
 
 module.exports = account_typesRouter;

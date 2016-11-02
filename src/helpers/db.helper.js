@@ -27,6 +27,7 @@ class DataBase{
         			console.log('Error connecting to DB...', err);
         		} else {
           			console.log('DB connection open');
+          			mongoose.Promise = global.Promise;
         		}
       		});
     	}
